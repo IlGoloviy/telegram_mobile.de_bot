@@ -25,9 +25,9 @@ axios.get(url)
           
     for (let i = 0; i < $('.cBox-body--resultitem', resultList).length; i++) {
       divResult.push($('.cBox-body--resultitem', resultList).eq(i));
-        carsArr.push($('.result-item', divResult[i]));
-      };
-    })
+      carsArr.push($('.result-item', divResult[i]));
+    };
+  })
   .catch(error => {
     console.log(error);
   })
@@ -48,13 +48,11 @@ bot.on('message', (msg) => {
           let divResult = [];
 
           divResult.push($('.cBox-body--resultitem', resultList).eq(0));
-          for (let i = 0; i < carsArr.length; i++) {
-            if (carsArr[i].attr('data-ad-id') !== $('.result-item', divResult[0]).attr('data-ad-id')) {
-              countNewCars++;
-              carsArr.unshift($('.result-item', divResult[0]));
-              carsArr.pop();
-              carsNewArr.push($('.result-item', divResult[0]));
-            }
+          if (carsArr[0].attr('data-ad-id') !== $('.result-item', divResult[0]).attr('data-ad-id')) {
+            countNewCars++;
+            carsArr.unshift($('.result-item', divResult[0]));
+            carsArr.pop();
+            carsNewArr.push($('.result-item', divResult[0]));
           }
           
           if (countNewCars) {
