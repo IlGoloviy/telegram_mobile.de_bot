@@ -16,40 +16,9 @@ let carsArr = [],
     price,
     countNewCars = 0;
 
-// puppeteer
-//   .launch({ 
-//     headless: false,
-//     devtools: true,
-//     slowMo: 250,
-//     // userDataDir: 'C:\\userData' // userDataDir <string> Path to a User Data Directory.
-//   })
-//   .then(browser => {
-//     return browser.newPage();
-//   })
-//   .then(page => {
-//     return page.goto(url).then(() => {
-//       return page.content();
-//     });
-//   })
-//   .then(html => {
-//     // console.log('html--html', html);
-//     const resultList = cheerio('.cBox--resultList', html).eq(1);
-//     let divResult = [];
-            
-//     for (let i = 0; i < cheerio('.cBox-body--resultitem', resultList).length; i++) {
-//       divResult.push(cheerio('.cBox-body--resultitem', resultList).eq(i));
-//       carsArr.push(cheerio('.result-item', divResult[i]));
-//     };
-//     console.log(carsArr.length);
-//   })
-//   .catch(err => {
-//     console.error(err);
-//   });
-
 axios.get(url)
   .then(response => { 
     const body = response.data;
-    console.log(body);
     const $ = cheerio.load(body);
     const resultList = $('.cBox--resultList').eq(1);
     let divResult = [];
@@ -67,30 +36,25 @@ bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 
   if (msg.text === '/start') {
-    bot.sendMessage(chatId, `${carsArr.length}\nОчікуйте! Як тільки новий товар буде доданий на сайт бот вам надішле повідомлення`);
+    console.log(`cars on page = ${carsArr.length}`);
+    bot.sendMessage(chatId, `Очікуйте! Як тільки новий товар буде доданий на сайт бот вам надішле повідомлення`);
 
     new CronJob('3,7,12,18,21,25,32,34,39,43,46,50,53,59 * * * * *', () => {
       axios.get(url)
         .then(response => { 
           const body = response.data;
-          // console.log(body);
           const $ = cheerio.load(body);
           const resultList = $('.cBox--resultList').eq(1);
           let divResult = [];
 
-          // let arrTest = [];
-          // for (let i = 0; i < carsArr.length; i++) {
-          //   arrTest.push(carsArr[i].attr('data-ad-id'));
-          // }
-          // console.log('елементи в масиві', arrTest);
-
           divResult.push($('.cBox-body--resultitem', resultList).eq(0));
-          // console.log(`carsArr[0].attr('data-ad-id')`, ' !== or === ', $('.result-item', divResult[0]).attr('data-ad-id'));
-          if (carsArr[0].attr('data-ad-id') !== $('.result-item', divResult[0]).attr('data-ad-id')) {
-            countNewCars++;
-            carsArr.unshift($('.result-item', divResult[0]));
-            carsArr.pop();
-            carsNewArr.push($('.result-item', divResult[0]));
+          for (let i = 0; i < carsArr.length; i++) {
+            if (carsArr[i].attr('data-ad-id') !== $('.result-item', divResult[0]).attr('data-ad-id')) {
+              countNewCars++;
+              carsArr.unshift($('.result-item', divResult[0]));
+              carsArr.pop();
+              carsNewArr.push($('.result-item', divResult[0]));
+            }
           }
           
           if (countNewCars) {
@@ -99,7 +63,6 @@ bot.on('message', (msg) => {
               name = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-8').children('.headline-block').children('.h3').text();
               price = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();
               if (!(price.indexOf('€') + 1) || photo == undefined) {
-                // console.log('Видалено з основного масива', name);
                 carsArr.shift();
               } else {
                 bot.sendPhoto(chatId, `https:${photo.split('$')[0]}$_10.jpg`, {
