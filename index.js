@@ -45,43 +45,62 @@ bot.on('message', (msg) => {
           const body = response.data;
           const $ = cheerio.load(body);
           const resultList = $('.cBox--resultList').eq(1);
-          let divResult = [];
-
-          divResult.push($('.cBox-body--resultitem', resultList).eq(0));
-          if (carsArr[0].attr('data-ad-id') !== $('.result-item', divResult[0]).attr('data-ad-id')) {
-            countNewCars++;
-            carsArr.unshift($('.result-item', divResult[0]));
+          let divResult = $('.cBox-body--resultitem', resultList).eq(0);
+          let newCar = $('.result-item', divResult).attr('data-ad-id');
+          
+          if (carsArr[0].attr('data-ad-id') !== newCar && carsArr[1].attr('data-ad-id') !== newCar) {
+            carsArr.unshift($('.result-item', divResult));
             carsArr.pop();
-            carsNewArr.push($('.result-item', divResult[0]));
+            carsNewArr.push($('.result-item', divResult));
+
+            photo = $(carsNewArr[0]).children('.g-row').children('.g-col-3').children('.image-block').children('.img-responsive').attr('src');
+            name = $(carsNewArr[0]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-8').children('.headline-block').children('.h3').text();
+            price = $(carsNewArr[0]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();  
+            const noPhoto = `http://consaltliga.com.ua/wp-content/themes/consultix/images/no-image-found-360x250.png`;
+
+            bot.sendPhoto(chatId, photo !== undefined ? `https:${photo.split('$')[0]}$_10.jpg` : noPhoto, {
+              caption: `${name}\n\nЦіна - ${price.split('(')[0]}`,
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: 'Купити',
+                      url: carsNewArr[0].attr('href')
+                    }
+                  ]
+                ]
+              }
+            });
+
+            carsNewArr = [];
           }
           
-          if (countNewCars) {
-            for (let i = 0; i < countNewCars; i++) {
-              photo = $(carsNewArr[i]).children('.g-row').children('.g-col-3').children('.image-block').children('.img-responsive').attr('src');
-              name = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-8').children('.headline-block').children('.h3').text();
-              price = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();
-              if (!(price.indexOf('€') + 1)) {
-                carsArr.shift();
-              } else {
-                const noPhoto = `http://consaltliga.com.ua/wp-content/themes/consultix/images/no-image-found-360x250.png`;
-                bot.sendPhoto(chatId, photo !== undefined ? `https:${photo.split('$')[0]}$_10.jpg` : noPhoto, {
-                  caption: `${name}\n\nЦіна - ${price.split('(')[0]}`,
-                  reply_markup: {
-                    inline_keyboard: [
-                      [
-                        {
-                          text: 'Купити',
-                          url: carsNewArr[i].attr('href')
-                        }
-                      ]
-                    ]
-                  }
-                });
-              }
-            }
-            countNewCars = 0;
-            carsNewArr = [];
-          }      
+          // if (countNewCars) {
+          //   console.log(`number of iteration = `, countNewCars)
+          //   for (let i = 0; i < countNewCars; i++) {
+          //     photo = $(carsNewArr[i]).children('.g-row').children('.g-col-3').children('.image-block').children('.img-responsive').attr('src');
+          //     name = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-8').children('.headline-block').children('.h3').text();
+          //     price = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();
+              
+          //     const noPhoto = `http://consaltliga.com.ua/wp-content/themes/consultix/images/no-image-found-360x250.png`;
+          //     bot.sendPhoto(chatId, photo !== undefined ? `https:${photo.split('$')[0]}$_10.jpg` : noPhoto, {
+          //       caption: `${name}\n\nЦіна - ${price.split('(')[0]}`,
+          //       reply_markup: {
+          //         inline_keyboard: [
+          //           [
+          //             {
+          //               text: 'Купити',
+          //               url: carsNewArr[i].attr('href')
+          //             }
+          //           ]
+          //         ]
+          //       }
+          //     });
+              
+          //   }
+          //   countNewCars = 0;
+          //   carsNewArr = [];
+          // }      
           
         })
         .catch(error => {
