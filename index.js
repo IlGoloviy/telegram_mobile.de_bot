@@ -39,7 +39,7 @@ bot.on('message', (msg) => {
     console.log(`cars on page = ${carsArr.length}`);
     bot.sendMessage(chatId, `Очікуйте! Як тільки новий товар буде доданий на сайт бот вам надішле повідомлення`);
 
-    new CronJob('3,7,12,18,21,25,32,34,39,43,46,50,53,59 * * * * *', () => {
+    new CronJob('3,7,12,16,18,21,25,29,32,34,36,39,43,46,48,50,53,57,59 * * * * *', () => {
       axios.get(url)
         .then(response => { 
           const body = response.data;
@@ -60,10 +60,11 @@ bot.on('message', (msg) => {
               photo = $(carsNewArr[i]).children('.g-row').children('.g-col-3').children('.image-block').children('.img-responsive').attr('src');
               name = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-8').children('.headline-block').children('.h3').text();
               price = $(carsNewArr[i]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();
-              if (!(price.indexOf('€') + 1) || photo == undefined) {
+              if (!(price.indexOf('€') + 1)) {
                 carsArr.shift();
               } else {
-                bot.sendPhoto(chatId, `https:${photo.split('$')[0]}$_10.jpg`, {
+                const noPhoto = `http://consaltliga.com.ua/wp-content/themes/consultix/images/no-image-found-360x250.png`;
+                bot.sendPhoto(chatId, photo !== undefined ? `https:${photo.split('$')[0]}$_10.jpg` : noPhoto, {
                   caption: `${name}\n\nЦіна - ${price.split('(')[0]}`,
                   reply_markup: {
                     inline_keyboard: [
