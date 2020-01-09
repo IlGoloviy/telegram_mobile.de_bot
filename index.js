@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const CronJob = require('cron').CronJob;
 
-const token = '913649494:AAH3TTw3mjQsOmYiuC8hucw0TPBURsajqJI';
+const token = '971356082:AAGvlCJmk8p9Z4Won12LpYFMkJmiq4pnDrA';
 const bot = new TelegramBot(token, {polling: true});
 
 const url = `https://suchen.mobile.de/fahrzeuge/search.html?damageUnrepaired=NO_DAMAGE_UNREPAIRED&daysAfterCreation=1&emissionClass=EURO5&grossPrice=false&isSearchRequest=true&makeModelVariant1.makeId=25100&maxPowerAsArray=KW&maxPrice=27500&minFirstRegistrationDate=2007&minPowerAsArray=KW&scopeId=STT&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`;
