@@ -5,10 +5,12 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const CronJob = require('cron').CronJob;
 
-const token = '971356082:AAGvlCJmk8p9Z4Won12LpYFMkJmiq4pnDrA';
+// const token = '971356082:AAGvlCJmk8p9Z4Won12LpYFMkJmiq4pnDrA';
+const token = '1080595576:AAE3gU9yf0_63jWijO3a9UlxhhG8jaXkniw';
 const bot = new TelegramBot(token, {polling: true});
 
-const url = `https://suchen.mobile.de/fahrzeuge/search.html?damageUnrepaired=NO_DAMAGE_UNREPAIRED&daysAfterCreation=1&emissionClass=EURO5&grossPrice=false&isSearchRequest=true&makeModelVariant1.makeId=25100&maxPowerAsArray=KW&maxPrice=27500&minFirstRegistrationDate=2007&minPowerAsArray=KW&scopeId=STT&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`;
+const url = `https://suchen.mobile.de/fahrzeuge/search.html?damageUnrepaired=NO_DAMAGE_UNREPAIRED&daysAfterCreation=1&emissionClass=EURO5&grossPrice=false&isSearchRequest=true&maxPowerAsArray=KW&maxPrice=25000&minFirstRegistrationDate=2007&minPowerAsArray=KW&scopeId=STT&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`
+// const url = `https://suchen.mobile.de/fahrzeuge/search.html?damageUnrepaired=NO_DAMAGE_UNREPAIRED&daysAfterCreation=1&emissionClass=EURO5&grossPrice=false&isSearchRequest=true&makeModelVariant1.makeId=25100&maxPowerAsArray=KW&maxPrice=27500&minFirstRegistrationDate=2007&minPowerAsArray=KW&scopeId=STT&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`;
 // const url = `https://suchen.mobile.de/fahrzeuge/search.html?damageUnrepaired=NO_DAMAGE_UNREPAIRED&daysAfterCreation=1&emissionClass=EURO5&grossPrice=false&isSearchRequest=true&makeModelVariant1.makeId=25100&                                  minFirstRegistrationDate=2007&pageNumber=1      &scopeId=STT&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`;
 let carsArr = [],
     carsNewArr = [],
