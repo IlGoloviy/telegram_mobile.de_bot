@@ -5,7 +5,6 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const CronJob = require('cron').CronJob;
 
-// const token = '971356082:AAGvlCJmk8p9Z4Won12LpYFMkJmiq4pnDrA';
 const token = '1080595576:AAE3gU9yf0_63jWijO3a9UlxhhG8jaXkniw';
 const bot = new TelegramBot(token, {polling: true});
 
@@ -23,9 +22,9 @@ axios.get(url)
   .then(response => { 
     const body = response.data;
     const $ = cheerio.load(body);
-    const resultList = $('.cBox--resultList').eq(1);
+    const resultList = $('.cBox--resultList');
     let divResult = [];
-          
+
     for (let i = 0; i < $('.cBox-body--resultitem', resultList).length; i++) {
       divResult.push($('.cBox-body--resultitem', resultList).eq(i));
       carsArr.push($('.result-item', divResult[i]));
@@ -47,7 +46,7 @@ bot.on('message', (msg) => {
         .then(response => { 
           const body = response.data;
           const $ = cheerio.load(body);
-          const resultList = $('.cBox--resultList').eq(1);
+          const resultList = $('.cBox--resultList');
           let divResult = $('.cBox-body--resultitem', resultList).eq(0);
           let newCar = $('.result-item', divResult).attr('data-ad-id');
           
@@ -61,6 +60,8 @@ bot.on('message', (msg) => {
             price = $(carsNewArr[0]).children('.g-row').children('.g-col-9').children('.g-row').children('.g-col-4').children('.price-block').children('.h3').text();  
             const noPhoto = `http://consaltliga.com.ua/wp-content/themes/consultix/images/no-image-found-360x250.png`;
 
+            console.log('name -> ', name)
+            console.log('price -> ', price)
             bot.sendPhoto(chatId, photo !== undefined ? `https:${photo.split('$')[0]}$_10.jpg` : noPhoto, {
               caption: `${name}\n\nЦіна - ${price.split('(')[0]}`,
               reply_markup: {
