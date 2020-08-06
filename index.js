@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const CronJob = require('cron').CronJob;
 
-const token = '913649494:AAGhCsPA6Yck6GAfuilG5PvXdm8T6EGlnJY'; //'your bot token (do not show)';
+const token = 'your bot token (do not show)';
 const bot = new TelegramBot(token, {polling: true});
 
 const url = `https://suchen.mobile.de/fahrzeuge/search.html?grossPrice=false&isSearchRequest=true&maxPrice=15000&minFirstRegistrationDate=2003&scopeId=ST&sortOption.sortBy=creationTime&sortOption.sortOrder=DESCENDING`
